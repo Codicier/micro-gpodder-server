@@ -11,4 +11,5 @@ services:
         source: ${DATA_DIR}
         target: /var/www/html/data
     ports:
+      - "80:80"
       - "443:443"

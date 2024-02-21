@@ -18,6 +18,7 @@ RUN mkdir -p /var/www/html/data
 WORKDIR /var/www/html/
 COPY server /var/www/html/
 
+EXPOSE 80
 EXPOSE 443
 
 VOLUME ["/var/www/html/data"]
