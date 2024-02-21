@@ -1,13 +1,14 @@
+version: '4'
 services:
   gpodder:
+    image: php8
     container_name: micro-gpodder-server
     build:
       context: ./
       dockerfile: Dockerfile
     volumes:
       - type: bind
-        source: ./data
-        target: /var/www/server/data
-    hostname: gpodder.localhost
+        source: ${DATA_DIR}
+        target: /var/www/html/data
     ports:
-      - 8080:8080
+      - "443:443"

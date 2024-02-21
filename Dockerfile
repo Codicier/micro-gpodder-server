@@ -1,21 +1,23 @@
-FROM alpine:edge
-LABEL Maintainer="BohwaZ <https://bohwaz.net/>" \
-      Description="Micro GPodder server"
+FROM php:8-apache
+# LABEL Maintainer="codicier" \
+#       Description="Micro GPodder server Apache2"
 
-RUN apk --no-cache add php82 php82-ctype php82-opcache php82-session php82-sqlite3
+RUN a2enmod ssl && a2enmod rewrite
+RUN mkdir -p /etc/apache2/ssl
 
-# Setup document root
+COPY php/php.ini /usr/local/etc/php/php.ini
+COPY ./ssl/*.pem /etc/apache2/ssl/
+COPY ./apache/000-default.conf /etc/apache2/sites-available/000-default.conf
+
+# # Setup document root
 RUN mkdir -p /var/www
-RUN mkdir -p /var/www/server
-RUN mkdir -p /var/www/server/data
+RUN mkdir -p /var/www/html
+RUN mkdir -p /var/www/html/data
 
-# Add application
-WORKDIR /var/www/
-COPY server /var/www/server/
+# # Add application
+WORKDIR /var/www/html/
+COPY server /var/www/html/
 
-EXPOSE 8080
+EXPOSE 443
 
-VOLUME ["/var/www/server/data"]
-
-ENV PHP_CLI_SERVER_WORKERS=2
-CMD ["php", "-S", "0.0.0.0:8080", "-t", "server", "server/index.php"]
+VOLUME ["/var/www/html/data"]
